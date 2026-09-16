@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jhyan/design-toolbox/internal/app"
+	"github.com/yaw0110/design-toolbox/internal/app"
 )
 
 type qualityPreset struct {

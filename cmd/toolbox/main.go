@@ -12,10 +12,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jhyan/design-toolbox/internal/app"
-	"github.com/jhyan/design-toolbox/internal/pdfcompress"
-	"github.com/jhyan/design-toolbox/internal/pdfmerge"
-	"github.com/jhyan/design-toolbox/internal/svg2gif"
+	"github.com/yaw0110/design-toolbox/internal/app"
+	"github.com/yaw0110/design-toolbox/internal/pdfcompress"
+	"github.com/yaw0110/design-toolbox/internal/pdfmerge"
+	"github.com/yaw0110/design-toolbox/internal/svg2gif"
 )
 
 var version = "0.1.0"

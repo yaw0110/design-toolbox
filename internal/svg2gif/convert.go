@@ -9,9 +9,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	apngencoder "github.com/jhyan/design-toolbox/internal/svg2gif/apng"
-	converter "github.com/jhyan/design-toolbox/internal/svg2gif/converter"
-	"github.com/jhyan/design-toolbox/internal/svg2gif/gifenc"
+	apngencoder "github.com/yaw0110/design-toolbox/internal/svg2gif/apng"
+	converter "github.com/yaw0110/design-toolbox/internal/svg2gif/converter"
+	"github.com/yaw0110/design-toolbox/internal/svg2gif/gifenc"
 )
 
 const defaultFPS = 20

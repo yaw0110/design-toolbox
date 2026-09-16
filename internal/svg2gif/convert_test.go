@@ -16,7 +16,7 @@ import (
 	"strings"
 	"testing"
 
-	converter "github.com/jhyan/design-toolbox/internal/svg2gif/converter"
+	converter "github.com/yaw0110/design-toolbox/internal/svg2gif/converter"
 )
 
 const testSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="30">` +

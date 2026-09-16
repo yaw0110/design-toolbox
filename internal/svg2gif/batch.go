@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jhyan/design-toolbox/internal/app"
+	"github.com/yaw0110/design-toolbox/internal/app"
 )
 
 // Main implements the "toolbox svg2gif" subcommand with the original

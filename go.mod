@@ -1,4 +1,4 @@
-module github.com/jhyan/design-toolbox
+module github.com/yaw0110/design-toolbox
 
 go 1.25.0
 

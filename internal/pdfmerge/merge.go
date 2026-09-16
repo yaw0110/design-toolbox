@@ -16,7 +16,7 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 
-	"github.com/jhyan/design-toolbox/internal/app"
+	"github.com/yaw0110/design-toolbox/internal/app"
 )
 
 const (
