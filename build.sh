@@ -24,8 +24,9 @@ build() {
 }
 
 rm -rf "$RELEASE_DIR"
-mkdir -p "$RELEASE_DIR/input/pdf" "$RELEASE_DIR/input/svg" \
-  "$RELEASE_DIR/output/pdf" "$RELEASE_DIR/output/svg/gif" "$RELEASE_DIR/output/svg/apng"
+mkdir -p "$RELEASE_DIR/input/pdf" "$RELEASE_DIR/input/svg" "$RELEASE_DIR/input/pdfmerge" \
+  "$RELEASE_DIR/output/pdf" "$RELEASE_DIR/output/svg/gif" "$RELEASE_DIR/output/svg/apng" \
+  "$RELEASE_DIR/output/pdfmerge"
 
 build darwin arm64 "$TEMP_DIR/toolbox-darwin-arm64"
 build darwin amd64 "$TEMP_DIR/toolbox-darwin-amd64"

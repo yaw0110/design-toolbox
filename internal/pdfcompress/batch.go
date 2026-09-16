@@ -86,7 +86,8 @@ func RunDefaultBatch(stdin io.Reader, stdout io.Writer) error {
 }
 
 // RunBatch compresses every PDF found in inputDirectory into outputDirectory,
-// asking the user to choose quality presets first.
+// asking the user to choose quality presets first. The last choice is
+// remembered in the toolbox settings file and offered as the default.
 func RunBatch(inputDirectory, outputDirectory string, stdin io.Reader, stdout io.Writer) error {
 	if err := os.MkdirAll(inputDirectory, 0o755); err != nil {
 		return fmt.Errorf("创建 input 目录: %w", err)
@@ -94,6 +95,7 @@ func RunBatch(inputDirectory, outputDirectory string, stdin io.Reader, stdout io
 	if err := os.MkdirAll(outputDirectory, 0o755); err != nil {
 		return fmt.Errorf("创建 output 目录: %w", err)
 	}
+	settings := app.LoadSettings()
 
 	entries, err := os.ReadDir(inputDirectory)
 	if err != nil {
@@ -125,9 +127,21 @@ func RunBatch(inputDirectory, outputDirectory string, stdin io.Reader, stdout io
 		return nil
 	}
 
-	qualities, err := promptForBatchQualities(stdin, stdout)
+	qualities, err := promptForBatchQualities(
+		stdin,
+		stdout,
+		rememberedQualities(settings.PDFQualities),
+	)
 	if err != nil {
 		return err
+	}
+	if !sameQualities(settings.PDFQualities, qualities) {
+		settings.PDFQualities = qualities
+		if saveErr := app.SaveSettings(settings); saveErr != nil {
+			log.Printf("记住压缩档位失败: %v", saveErr)
+		} else {
+			log.Printf("已记住压缩档位，下次直接回车可复用")
+		}
 	}
 
 	successes := 0
@@ -182,7 +196,17 @@ func batchOutputName(baseName string, quality int, useQualitySuffix bool) string
 	return baseName + "-压缩版.pdf"
 }
 
-func promptForBatchQualities(input io.Reader, output io.Writer) ([]int, error) {
+func promptForBatchQualities(
+	input io.Reader,
+	output io.Writer,
+	remembered []int,
+) ([]int, error) {
+	usesRememberedDefault := len(remembered) > 0
+	defaultQualities := remembered
+	if !usesRememberedDefault {
+		defaultQualities = []int{defaultBatchQuality}
+	}
+
 	reader := bufio.NewReader(input)
 	for {
 		fmt.Fprintln(output)
@@ -197,12 +221,20 @@ func promptForBatchQualities(input io.Reader, output io.Writer) ([]int, error) {
 				preset.description,
 			)
 		}
-		fmt.Fprintf(
-			output,
-			"直接回车 = %s（q%d）。\n",
-			batchQualityPresets[0].name,
-			batchQualityPresets[0].quality,
-		)
+		if usesRememberedDefault {
+			fmt.Fprintf(
+				output,
+				"直接回车 = 上次使用（%s）。\n",
+				formatQualityList(defaultQualities),
+			)
+		} else {
+			fmt.Fprintf(
+				output,
+				"直接回车 = %s（q%d）。\n",
+				batchQualityPresets[0].name,
+				batchQualityPresets[0].quality,
+			)
+		}
 		fmt.Fprintln(output, "也可以输入多个 quality，例如：40,50,60")
 		fmt.Fprintln(output, "或输入范围，例如：q10-q90（生成 q10/q20/.../q90）")
 		fmt.Fprint(output, "请输入选择：")
@@ -214,9 +246,13 @@ func promptForBatchQualities(input io.Reader, output io.Writer) ([]int, error) {
 
 		choice := strings.TrimSpace(line)
 		if choice == "" {
-			selected := batchQualityPresets[0]
-			fmt.Fprintf(output, "已选择：%s（q%d）\n", selected.name, selected.quality)
-			return []int{selected.quality}, nil
+			if usesRememberedDefault {
+				fmt.Fprintf(output, "已选择：上次使用（%s）\n", formatQualityList(defaultQualities))
+			} else {
+				selected := batchQualityPresets[0]
+				fmt.Fprintf(output, "已选择：%s（q%d）\n", selected.name, selected.quality)
+			}
+			return defaultQualities, nil
 		}
 
 		for _, preset := range batchQualityPresets {
@@ -236,11 +272,41 @@ func promptForBatchQualities(input io.Reader, output io.Writer) ([]int, error) {
 		fmt.Fprintln(output, "请直接回车，或输入 1-4、40、40,50,60、q10-q90。")
 
 		if err == io.EOF {
-			selected := batchQualityPresets[0]
-			fmt.Fprintf(output, "输入结束，使用默认：%s（q%d）\n", selected.name, selected.quality)
-			return []int{selected.quality}, nil
+			if usesRememberedDefault {
+				fmt.Fprintf(output, "输入结束，使用上次设置：%s\n", formatQualityList(defaultQualities))
+			} else {
+				selected := batchQualityPresets[0]
+				fmt.Fprintf(output, "输入结束，使用默认：%s（q%d）\n", selected.name, selected.quality)
+			}
+			return defaultQualities, nil
 		}
 	}
+}
+
+// rememberedQualities validates the stored qualities list; a corrupt entry
+// discards the whole list so prompts fall back to the built-in default.
+func rememberedQualities(values []int) []int {
+	if len(values) == 0 {
+		return nil
+	}
+	for _, value := range values {
+		if value < 1 || value > 100 {
+			return nil
+		}
+	}
+	return values
+}
+
+func sameQualities(left, right []int) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for index := range left {
+		if left[index] != right[index] {
+			return false
+		}
+	}
+	return true
 }
 
 func parseQualityList(input string) ([]int, error) {

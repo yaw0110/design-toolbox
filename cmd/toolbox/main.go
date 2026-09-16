@@ -14,6 +14,7 @@ import (
 
 	"github.com/jhyan/design-toolbox/internal/app"
 	"github.com/jhyan/design-toolbox/internal/pdfcompress"
+	"github.com/jhyan/design-toolbox/internal/pdfmerge"
 	"github.com/jhyan/design-toolbox/internal/svg2gif"
 )
 
@@ -59,6 +60,7 @@ func runMenu() {
 		fmt.Println("请选择工具：")
 		fmt.Printf("  1. PDF 压缩        %s\n", inputSummary("pdf", ".pdf"))
 		fmt.Printf("  2. SVG/SVGA 转 GIF %s\n", inputSummary("svg", ".svg", ".svga"))
+		fmt.Printf("  3. PDF 合并/拆分   %s\n", inputSummary("pdfmerge", ".pdf"))
 		fmt.Println("  0. 退出")
 		fmt.Println()
 		fmt.Print("请输入选择：")
@@ -74,6 +76,8 @@ func runMenu() {
 			runTool(reader, "PDF 压缩", pdfcompress.RunDefaultBatch)
 		case "2":
 			runTool(reader, "SVG/SVGA 转 GIF", svg2gif.RunDefaultBatch)
+		case "3":
+			runTool(reader, "PDF 合并/拆分", pdfmerge.RunDefaultBatch)
 		case "0", "q", "Q", "quit", "exit":
 			return
 		case "":
@@ -145,6 +149,7 @@ func printUsage() {
   toolbox                  交互式主菜单（双击运行默认进入）
   toolbox pdf [参数]       PDF 压缩
   toolbox svg2gif [参数]   SVG/SVGA 转 GIF
+  toolbox pdfmerge         PDF 合并/拆分
   toolbox version          显示版本
 
 PDF 压缩:
@@ -156,10 +161,16 @@ SVG/SVGA 转 GIF:
   toolbox svg2gif [选项] <source> <target>
     选项: -w/--width --height -f/--fps
 
+PDF 合并/拆分:
+  toolbox pdfmerge        多个 PDF 合并或单个多页 PDF 按页拆分
+                          input/pdfmerge/ → output/pdfmerge/
+
 目录约定（相对于程序所在目录）:
-  input/pdf/     待压缩 PDF
-  input/svg/     待转换 SVG/SVGA
-  output/pdf/    压缩结果
-  output/svg/    转换结果（gif/ 与 apng/ 子目录）
+  input/pdf/        待压缩 PDF
+  input/svg/        待转换 SVG/SVGA
+  input/pdfmerge/   待合并/拆分 PDF
+  output/pdf/       压缩结果
+  output/svg/       转换结果（gif/ 与 apng/ 子目录）
+  output/pdfmerge/  合并/拆分结果
 `)
 }

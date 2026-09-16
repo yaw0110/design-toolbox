@@ -202,7 +202,7 @@ func TestPromptForFPS(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var output strings.Builder
-			fps, err := promptForFPS(strings.NewReader(tt.input), &output)
+			fps, err := promptForFPS(strings.NewReader(tt.input), &output, defaultFPS)
 			if err != nil {
 				t.Fatalf("prompt failed: %v\n%s", err, output.String())
 			}

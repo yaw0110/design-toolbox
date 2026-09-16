@@ -9,8 +9,12 @@
 | --- | --- | --- |
 | PDF 压缩 | 压缩单页长图型 PDF（作品集、长图导出稿） | `toolbox pdf` |
 | SVG/SVGA 转 GIF | 批量转换 SVG（含 SMIL 动画）/SVGA 为 GIF 与 APNG | `toolbox svg2gif` |
+| PDF 合并/拆分 | 多个 PDF 按顺序合并，或单个多页 PDF 按页拆分 | `toolbox pdfmerge` |
 
-后续按需扩展（图片批量压缩、多尺寸导出、PDF 合并拆分等），每个工具注册进主菜单即可。
+后续按需扩展（图片批量压缩、多尺寸导出等），每个工具注册进主菜单即可。
+
+交互工具的选择（压缩档位、帧率）会记忆在程序旁边的 `toolbox.settings.json`，
+下次直接回车即可复用。
 
 ## 使用方式
 
@@ -32,10 +36,12 @@
 ### 目录约定（相对于程序所在目录）
 
 ```text
-input/pdf/      待压缩 PDF
-input/svg/      待转换 SVG/SVGA
-output/pdf/     压缩结果
-output/svg/     转换结果（gif/ 与 apng/ 子目录）
+input/pdf/        待压缩 PDF
+input/svg/        待转换 SVG/SVGA
+input/pdfmerge/   待合并/拆分 PDF
+output/pdf/       压缩结果
+output/svg/       转换结果（gif/ 与 apng/ 子目录）
+output/pdfmerge/  合并/拆分结果
 ```
 
 目录不存在时程序会自动创建。输入文件永远不会被修改或删除。
@@ -47,6 +53,7 @@ toolbox                      # 交互主菜单
 toolbox pdf                  # 批处理 input/pdf/ → output/pdf/（交互选档位）
 toolbox pdf -input a.pdf -output b.pdf -quality 40   # 单文件模式
 toolbox svg2gif ./source ./target -w 800 --height 800 -f 20
+toolbox pdfmerge             # 批处理 input/pdfmerge/ → output/pdfmerge/
 toolbox version
 ```
 
@@ -59,11 +66,12 @@ toolbox version
 design-toolbox/
 ├── cmd/toolbox/main.go          # 唯一入口：菜单 + 子命令分发
 ├── internal/
-│   ├── app/                     # 共享：程序目录定位、交互暂停
+│   ├── app/                     # 共享：程序目录定位、设置记忆、交互暂停
 │   ├── pdfcompress/             # PDF 压缩（含回归测试）
 │   │   ├── compress.go          #   核心压缩与 PDF 写入
 │   │   ├── batch.go             #   批处理与档位交互
 │   │   └── portable_pdf.go      #   纯 Go PDF 解析/提取（pdfcpu）
+│   ├── pdfmerge/                # PDF 合并/拆分（pdfcpu）
 │   └── svg2gif/
 │       ├── convert.go           #   单文件转换（ffmpeg 或内置 GIF 编码）
 │       ├── batch.go             #   批处理与 CLI 子命令

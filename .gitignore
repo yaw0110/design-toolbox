@@ -3,6 +3,9 @@
 *.tmp
 *.test
 
+# Remembered user preferences live next to the executable.
+/toolbox.settings.json
+
 # Local user files and generated results must never be committed.
 # The .gitkeep placeholders keep the directory skeleton in Git.
 /input/*

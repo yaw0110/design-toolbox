@@ -107,9 +107,23 @@ func RunBatch(source, target string, stdin io.Reader, stdout io.Writer) error {
 		return nil
 	}
 
-	opts.FPS, err = promptForFPS(stdin, stdout)
+	opts.FPS, err = promptForFPS(
+		stdin,
+		stdout,
+		rememberedFPS(app.LoadSettings().SVGFps),
+	)
 	if err != nil {
 		return err
+	}
+
+	settings := app.LoadSettings()
+	if settings.SVGFps != opts.FPS {
+		settings.SVGFps = opts.FPS
+		if saveErr := app.SaveSettings(settings); saveErr != nil {
+			log.Printf("记住帧率失败: %v", saveErr)
+		} else {
+			log.Printf("已记住帧率，下次直接回车可复用")
+		}
 	}
 
 	ffmpegPath := DetectFFmpeg()
@@ -210,11 +224,15 @@ func scanInputFiles(source string) ([]string, error) {
 	return inputFiles, nil
 }
 
-func promptForFPS(stdin io.Reader, stdout io.Writer) (int, error) {
+func promptForFPS(stdin io.Reader, stdout io.Writer, fallbackFPS int) (int, error) {
+	hint := ""
+	if fallbackFPS != defaultFPS {
+		hint = "，上次使用"
+	}
 	reader := bufio.NewReader(stdin)
 	for {
 		fmt.Fprintln(stdout)
-		fmt.Fprintf(stdout, "请输入帧率 FPS（直接回车 = %d，范围 1-50）：", defaultFPS)
+		fmt.Fprintf(stdout, "请输入帧率 FPS（直接回车 = %d%s，范围 1-50）：", fallbackFPS, hint)
 
 		line, err := reader.ReadString('\n')
 		if err != nil && err != io.EOF {
@@ -223,16 +241,16 @@ func promptForFPS(stdin io.Reader, stdout io.Writer) (int, error) {
 
 		choice := strings.TrimSpace(line)
 		if choice == "" {
-			fmt.Fprintf(stdout, "已选择：FPS=%d\n", defaultFPS)
-			return defaultFPS, nil
+			fmt.Fprintf(stdout, "已选择：FPS=%d\n", fallbackFPS)
+			return fallbackFPS, nil
 		}
 
 		fps, parseErr := strconv.Atoi(choice)
 		if parseErr != nil || fps < 1 || fps > 50 {
 			fmt.Fprintf(stdout, "输入无效：%q 不是 1-50 之间的数字，请重新输入。\n", choice)
 			if err == io.EOF {
-				fmt.Fprintf(stdout, "输入结束，使用默认：FPS=%d\n", defaultFPS)
-				return defaultFPS, nil
+				fmt.Fprintf(stdout, "输入结束，使用默认：FPS=%d\n", fallbackFPS)
+				return fallbackFPS, nil
 			}
 			continue
 		}
@@ -240,6 +258,15 @@ func promptForFPS(stdin io.Reader, stdout io.Writer) (int, error) {
 		fmt.Fprintf(stdout, "已选择：FPS=%d\n", fps)
 		return fps, nil
 	}
+}
+
+// rememberedFPS validates the stored FPS; anything outside 1-50 falls back
+// to the built-in default.
+func rememberedFPS(value int) int {
+	if value < 1 || value > 50 {
+		return defaultFPS
+	}
+	return value
 }
 
 func validateOptions(opts *Options) error {

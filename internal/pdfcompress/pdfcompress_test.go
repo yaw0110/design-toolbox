@@ -365,7 +365,7 @@ func TestBatchModeContinuesAfterOnePDFHasFailed(t *testing.T) {
 
 func TestPromptForBatchQualitiesUsesDefaultForEmptyInput(t *testing.T) {
 	var output strings.Builder
-	qualities, err := promptForBatchQualities(strings.NewReader("\n"), &output)
+	qualities, err := promptForBatchQualities(strings.NewReader("\n"), &output, nil)
 	if err != nil {
 		t.Fatalf("prompt failed: %v\n%s", err, output.String())
 	}
@@ -401,7 +401,7 @@ func TestPromptForBatchQualitiesAcceptsPresetMultipleValuesAndRange(t *testing.T
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var output strings.Builder
-			qualities, err := promptForBatchQualities(strings.NewReader(tt.input), &output)
+			qualities, err := promptForBatchQualities(strings.NewReader(tt.input), &output, nil)
 			if err != nil {
 				t.Fatalf("prompt failed: %v\n%s", err, output.String())
 			}
@@ -412,13 +412,50 @@ func TestPromptForBatchQualitiesAcceptsPresetMultipleValuesAndRange(t *testing.T
 
 func TestPromptForBatchQualitiesRetriesAfterInvalidInput(t *testing.T) {
 	var output strings.Builder
-	qualities, err := promptForBatchQualities(strings.NewReader("q0\nq35\n"), &output)
+	qualities, err := promptForBatchQualities(strings.NewReader("q0\nq35\n"), &output, nil)
 	if err != nil {
 		t.Fatalf("prompt failed: %v\n%s", err, output.String())
 	}
 	requireQualities(t, qualities, []int{35})
 	if !strings.Contains(output.String(), "输入无效") {
 		t.Fatalf("prompt did not report invalid input:\n%s", output.String())
+	}
+}
+
+func TestPromptForBatchQualitiesUsesRememberedDefault(t *testing.T) {
+	var output strings.Builder
+	qualities, err := promptForBatchQualities(strings.NewReader("\n"), &output, []int{35, 45})
+	if err != nil {
+		t.Fatalf("prompt failed: %v\n%s", err, output.String())
+	}
+	requireQualities(t, qualities, []int{35, 45})
+	if !strings.Contains(output.String(), "上次使用（q35, q45）") {
+		t.Fatalf("prompt did not offer remembered default:\n%s", output.String())
+	}
+}
+
+func TestRememberedQualitiesRejectsInvalidValues(t *testing.T) {
+	cases := []struct {
+		name     string
+		values   []int
+		expected []int
+	}{
+		{name: "empty", values: nil, expected: nil},
+		{name: "valid list", values: []int{40, 50}, expected: []int{40, 50}},
+		{name: "invalid entry discards list", values: []int{40, 0}, expected: nil},
+		{name: "out of range discards list", values: []int{101}, expected: nil},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			got := rememberedQualities(tt.values)
+			if tt.expected == nil {
+				if got != nil {
+					t.Fatalf("remembered = %v, want nil", got)
+				}
+				return
+			}
+			requireQualities(t, got, tt.expected)
+		})
 	}
 }
 
