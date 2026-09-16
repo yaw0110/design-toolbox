@@ -1,0 +1,39 @@
+.DS_Store
+*.log
+*.tmp
+*.test
+
+# Local user files and generated results must never be committed.
+# The .gitkeep placeholders keep the directory skeleton in Git.
+/input/*
+!/input/pdf
+!/input/svg
+/input/pdf/*
+!/input/pdf/.gitkeep
+/input/svg/*
+!/input/svg/.gitkeep
+
+/output/*
+!/output/pdf
+!/output/svg
+/output/pdf/*
+!/output/pdf/.gitkeep
+/output/svg/*
+!/output/svg/gif
+!/output/svg/apng
+/output/svg/gif/*
+!/output/svg/gif/.gitkeep
+/output/svg/apng/*
+!/output/svg/apng/.gitkeep
+
+# Release directories are produced by build.sh and are never committed.
+/releases/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Debug binaries
+__debug_bin*

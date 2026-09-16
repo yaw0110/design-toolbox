@@ -1,0 +1,100 @@
+# github.com/clipperhouse/uax29/v2 v2.7.0
+## explicit; go 1.18
+github.com/clipperhouse/uax29/v2/graphemes
+# github.com/hhrutter/lzw v1.0.0
+## explicit; go 1.19
+github.com/hhrutter/lzw
+# github.com/hhrutter/pkcs7 v0.2.2
+## explicit; go 1.23
+github.com/hhrutter/pkcs7
+# github.com/hhrutter/tiff v1.0.3
+## explicit; go 1.25.0
+github.com/hhrutter/tiff
+# github.com/kettek/apng v0.0.0-20250827064933-2bb5f5fcf253
+## explicit
+github.com/kettek/apng
+# github.com/mattn/go-runewidth v0.0.24
+## explicit; go 1.20
+github.com/mattn/go-runewidth
+# github.com/pdfcpu/pdfcpu v0.13.0
+## explicit; go 1.25.0
+github.com/pdfcpu/pdfcpu/internal/corefont/metrics
+github.com/pdfcpu/pdfcpu/pkg/api
+github.com/pdfcpu/pdfcpu/pkg/filter
+github.com/pdfcpu/pdfcpu/pkg/font
+github.com/pdfcpu/pdfcpu/pkg/log
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/color
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/create
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/draw
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/fault
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/font
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/form
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/format
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/primitives
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/safemath
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/sanitize
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/scan
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/sign
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types
+github.com/pdfcpu/pdfcpu/pkg/pdfcpu/validate
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
+# github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c
+## explicit; go 1.17
+github.com/srwiley/oksvg
+# github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
+## explicit; go 1.17
+github.com/srwiley/rasterx
+# golang.org/x/crypto v0.52.0
+## explicit; go 1.25.0
+golang.org/x/crypto/ocsp
+# golang.org/x/image v0.41.0
+## explicit; go 1.25.0
+golang.org/x/image/ccitt
+golang.org/x/image/colornames
+golang.org/x/image/draw
+golang.org/x/image/math/f64
+golang.org/x/image/math/fixed
+golang.org/x/image/riff
+golang.org/x/image/vector
+golang.org/x/image/vp8
+golang.org/x/image/vp8l
+golang.org/x/image/webp
+# golang.org/x/net v0.54.0
+## explicit; go 1.25.0
+golang.org/x/net/html
+golang.org/x/net/html/atom
+golang.org/x/net/html/charset
+# golang.org/x/text v0.37.0
+## explicit; go 1.25.0
+golang.org/x/text/cases
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/htmlindex
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/japanese
+golang.org/x/text/encoding/korean
+golang.org/x/text/encoding/simplifiedchinese
+golang.org/x/text/encoding/traditionalchinese
+golang.org/x/text/encoding/unicode
+golang.org/x/text/internal
+golang.org/x/text/internal/language
+golang.org/x/text/internal/language/compact
+golang.org/x/text/internal/tag
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/language
+golang.org/x/text/runes
+golang.org/x/text/secure/bidirule
+golang.org/x/text/secure/precis
+golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
+golang.org/x/text/unicode/norm
+golang.org/x/text/width
+# gopkg.in/yaml.v2 v2.4.0
+## explicit; go 1.15
+gopkg.in/yaml.v2

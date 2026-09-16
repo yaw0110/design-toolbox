@@ -1,0 +1,24 @@
+module github.com/jhyan/design-toolbox
+
+go 1.25.0
+
+require (
+	github.com/hhrutter/tiff v1.0.3
+	github.com/kettek/apng v0.0.0-20250827064933-2bb5f5fcf253
+	github.com/pdfcpu/pdfcpu v0.13.0
+	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c
+	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
+	golang.org/x/image v0.41.0
+)
+
+require (
+	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
+	github.com/hhrutter/lzw v1.0.0 // indirect
+	github.com/hhrutter/pkcs7 v0.2.2 // indirect
+	github.com/mattn/go-runewidth v0.0.24 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
+	golang.org/x/net v0.54.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+)
